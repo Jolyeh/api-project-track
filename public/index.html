@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Documentation API — Project Track</title>
+    <style>
+        :root {
+            --bg: #0f1724;
+            --card: #0b1220;
+            --muted: #9aa8bf;
+            --accent: #2ea6f4;
+            --accent-2: #7ed957;
+            --danger: #ff6b6b;
+            --glass: rgba(255, 255, 255, 0.03);
+            --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(180deg, #071226 0%, #08142a 60%);
+            color: #e6eef8;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.45;
+        }
+
+        header {
+            padding: 28px 34px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.02), transparent);
+            position: sticky;
+            top: 0;
+            z-index: 30;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+            color: var(--accent);
+            letter-spacing: 0.2px;
+        }
+
+        header p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+            padding: 28px;
+            max-width: 1200px;
+            margin: 20px auto;
+        }
+
+        nav {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            height: calc(100vh - 140px);
+            overflow: auto;
+        }
+
+        nav h3 {
+            margin: 0 0 8px 0;
+            color: var(--accent);
+            font-size: 13px
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 0 0
+        }
+
+        nav li {
+            margin: 6px 0
+        }
+
+        a.link {
+            display: block;
+            padding: 8px 10px;
+            border-radius: 8px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        a.link:hover {
+            background: rgba(255, 255, 255, 0.02);
+            color: #fff
+        }
+
+        main {
+            padding: 18px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.005));
+            border-radius: 12px;
+            min-height: 60vh;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        section.doc-section {
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.03)
+        }
+
+        section h2 {
+            margin: 6px 0 12px 0;
+            color: var(--accent)
+        }
+
+        section p.lead {
+            color: var(--muted);
+            margin-top: 0
+        }
+
+        .endpoint {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .method {
+            font-family: var(--mono);
+            font-weight: 700;
+            padding: 6px 9px;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: 0.6px;
+        }
+
+        .GET {
+            background: #3ac47d
+        }
+
+        .POST {
+            background: #2ea6f4
+        }
+
+        .PUT {
+            background: #ffb020
+        }
+
+        .DELETE {
+            background: var(--danger)
+        }
+
+        .url {
+            font-family: var(--mono);
+            color: #d7eafc;
+            font-size: 14px
+        }
+
+        pre.example {
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+            padding: 12px;
+            border-radius: 8px;
+            overflow: auto;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #dbeefd;
+            font-family: var(--mono);
+            font-size: 13px;
+            margin: 8px 0 0 0;
+        }
+
+        .hint {
+            color: var(--muted);
+            font-size: 13px;
+            margin-top: 6px
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 12px
+        }
+
+        th,
+        td {
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            padding: 10px;
+            text-align: left;
+            font-size: 13px
+        }
+
+        th {
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff
+        }
+
+        footer {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 13px;
+            text-align: center
+        }
+
+        @media(max-width:900px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 12px
+            }
+
+            nav {
+                height: auto;
+                display: flex;
+                overflow: auto;
+                margin-bottom: 12px
+            }
+
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h1>Project Track — Documentation API</h1>
+            <p>Routes exposées sur ton serveur (préfixe <strong>/api</strong>)</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav aria-label="Navigation API">
+            <h3>Sections</h3>
+            <ul>
+                <li><a class="link" href="#auth">Authentification</a></li>
+                <li><a class="link" href="#organisation">Organisations</a></li>
+                <li><a class="link" href="#role">Rôles</a></li>
+                <li><a class="link" href="#status">Statuts</a></li>
+                <li><a class="link" href="#projet">Projets</a></li>
+                <li><a class="link" href="#tache">Tâches</a></li>
+                <li><a class="link" href="#sous-tache">Sous-tâches</a></li>
+                <li><a class="link" href="#examples">Exemples rapides</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- AUTH -->
+            <section id="auth" class="doc-section">
+                <h2>Authentification</h2>
+                <p class="lead">Gestion des inscriptions, connexions et récupération du profil.</p>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/register</span>
+                </div>
+                <div class="hint">Créer un utilisateur</div>
+                <pre class="example">{
+  "name": "Joël Prince",
+  "email": "joel.prince@example.com",
+  "password": "MonMotDePasse123"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/login</span>
+                </div>
+                <div class="hint">Connexion — renvoie token</div>
+                <pre class="example">{
+  "email": "joel.prince@example.com",
+  "password": "MonMotDePasse123"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/profile</span>
+                </div>
+                <div class="hint">Récupérer le profil de l'utilisateur connecté — Header:
+                    <code>Authorization: Bearer &lt;token&gt;</code>
+                </div>
+            </section>
+
+            <!-- ORGANISATION -->
+            <section id="organisation" class="doc-section">
+                <h2>Organisations</h2>
+                <p class="lead">Création / lecture / mise à jour / suppression et gestion des membres.</p>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/organisation</span>
+                </div>
+                <div class="hint">Créer une organisation — propriétaire = utilisateur connecté</div>
+                <pre class="example">{
+  "name": "Project Track Team"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/organisation/mine</span>
+                </div>
+                <div class="hint">Organisations dont l'utilisateur connecté est propriétaire</div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/organisation/member-of</span>
+                </div>
+                <div class="hint">Organisations dont l'utilisateur connecté est membre</div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/organisation/:id</span>
+                </div>
+                <div class="hint">Récupérer une organisation par son id</div>
+
+                <div class="endpoint">
+                    <span class="method PUT">PUT</span>
+                    <span class="url">/api/organisation/:id</span>
+                </div>
+                <pre class="example">{
+  "name": "Nouveau nom"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/organisation/:id</span>
+                </div>
+
+                <h3 style="margin-top:14px">Membres</h3>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/organisation/:id/members</span>
+                </div>
+                <pre class="example">{
+  "userId": "3f29b9c8-1a7b-4d5e-9cfe-123456789abc",
+  "roleId": "d51f6b24-2a5c-4d37-8a3f-abcdef123456"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/organisation/:id/members</span>
+                </div>
+                <pre class="example">{
+  "userId": "3f29b9c8-1a7b-4d5e-9cfe-123456789abc"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/organisation/:id/members</span>
+                </div>
+            </section>
+
+            <!-- ROLES -->
+            <section id="role" class="doc-section">
+                <h2>Rôles</h2>
+                <p class="lead">Gérer les rôles utilisés en organisation ou projet (enum scope).</p>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/role</span>
+                </div>
+                <pre class="example">{
+  "name": "Team Lead",
+  "scope": "ORGANIZATION",
+  "description": "Responsable de l'équipe"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/role</span>
+                </div>
+                <div class="hint">Lister tous les rôles</div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/role/:id</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method PUT">PUT</span>
+                    <span class="url">/api/role/:id</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/role/:id</span>
+                </div>
+            </section>
+
+            <!-- STATUS -->
+            <section id="status" class="doc-section">
+                <h2>Statuts</h2>
+                <p class="lead">Créer et lister des statuts pour projets, tâches et sous-tâches.</p>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/status</span>
+                </div>
+                <pre class="example">{
+  "name": "En cours",
+  "type": "TASK",
+  "color": "#FFAA00"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/status</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/status/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method PUT">PUT</span>
+                    <span class="url">/api/status/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/status/:id</span>
+                </div>
+            </section>
+
+            <!-- PROJETS -->
+            <section id="projet" class="doc-section">
+                <h2>Projets</h2>
+                <p class="lead">Gestion complète des projets et des participants.</p>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/projet</span>
+                </div>
+                <pre class="example">{
+  "name": "Nouvelle app",
+  "description": "Back + mobile",
+  "deadline": "2025-12-31T23:59:59.000Z",
+  "statusId": "uuid-status",
+  "organizationId": "uuid-organisation"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/projet/mine</span>
+                </div>
+                <div class="hint">Projets liés aux organisations que l'utilisateur a créées</div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/projet/member-of</span>
+                </div>
+                <div class="hint">Projets où l'utilisateur est participant</div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/projet/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method PUT">PUT</span>
+                    <span class="url">/api/projet/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/projet/:id</span>
+                </div>
+
+                <h3 style="margin-top:12px">Participants</h3>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/projet/:id/participants</span>
+                </div>
+                <pre class="example">{
+  "userId": "uuid-user",
+  "roleId": "uuid-role"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/projet/:id/participants</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/projet/:id/participants</span>
+                </div>
+            </section>
+
+            <!-- TACHES -->
+            <section id="tache" class="doc-section">
+                <h2>Tâches</h2>
+                <p class="lead">Créer, lire, mettre à jour, supprimer des tâches — assignation, échéances, filtres par
+                    projet.</p>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/tache</span>
+                </div>
+                <pre class="example">{
+  "projectId": "677f1cde-1efc-4283-976f-5d9c10e45a0c",
+  "title": "Développer la page d'accueil",
+  "description": "Créer la maquette et coder la page d'accueil en React",
+  "statusId": "7b5e51e8-f26e-4791-8c4e-b0be82af856f",
+  "assignedTo": "c55c94a3-5f85-4c40-92c2-da0a10b0ef14",
+  "dueDate": "2025-09-30T23:59:59.000Z"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/tache/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method PUT">PUT</span>
+                    <span class="url">/api/tache/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/tache/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/tache/project/:projectId</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/tache/project/:projectId/user</span>
+                </div>
+                <div class="hint">Récupère uniquement les tâches du projet pour l'utilisateur connecté</div>
+            </section>
+
+            <!-- SOUS-TACHES -->
+            <section id="sous-tache" class="doc-section">
+                <h2>Sous-tâches</h2>
+
+                <div class="endpoint">
+                    <span class="method POST">POST</span>
+                    <span class="url">/api/sous-tache</span>
+                </div>
+                <pre class="example">{
+  "taskId": "uuid-task",
+  "title": "Rédiger le contenu",
+  "statusId": "uuid-status"
+}</pre>
+
+                <div class="endpoint">
+                    <span class="method GET">GET</span>
+                    <span class="url">/api/sous-tache/task/:taskId</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method PUT">PUT</span>
+                    <span class="url">/api/sous-tache/:id</span>
+                </div>
+
+                <div class="endpoint">
+                    <span class="method DELETE">DELETE</span>
+                    <span class="url">/api/sous-tache/:id</span>
+                </div>
+            </section>
+
+            <section id="examples" class="doc-section">
+                <h2>Exemples rapides</h2>
+
+                <h4>Header d'authentification</h4>
+                <pre class="example">Authorization: Bearer &lt;ACCESS_TOKEN&gt;</pre>
+
+                <h4>Format réponse standard</h4>
+                <pre class="example">{
+  "status": true,
+  "message": "Opération réussie",
+  "data": { ... }
+}</pre>
+
+                <h4>Exemple minimal — créer projet (curl)</h4>
+                <pre class="example">curl -X POST "https://api.example.com/api/projet" \
+-H "Authorization: Bearer &lt;TOKEN&gt;" \
+-H "Content-Type: application/json" \
+-d '{
+  "name":"Mon Projet",
+  "organizationId":"uuid-org",
+  "statusId":"uuid-status"
+}'</pre>
+            </section>
+
+            <footer>
+                <p>© Project Track — Documentation générée automatiquement</p>
+            </footer>
+        </main>
+    </div>
+</body>
+
+</html>
