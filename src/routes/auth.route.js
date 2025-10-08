@@ -8,6 +8,6 @@ const authRoutes = express.Router();
 authRoutes.post("/register", register);
 authRoutes.post("/login", login);
 authRoutes.get("/profile", authMiddleware, getProfile);
-authRoutes.post("/search", getUserByEmail);
+authRoutes.post("/search", authMiddleware, getUserByEmail);
 
 export default authRoutes;
