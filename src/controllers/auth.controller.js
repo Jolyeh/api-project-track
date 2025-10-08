@@ -80,3 +80,35 @@ export async function getProfile(req, res) {
     return sendResponse(res, false, "Erreur interne du serveur");
   }
 }
+
+export async function getUserByEmail(req, res) {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return sendResponse(res, false, "L'email est requis");
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        avatarUrl: true,
+        createdAt: true,
+        updatedAt: true
+      }
+    });
+
+    if (!user) {
+      return sendResponse(res, false, "Aucun utilisateur trouvé avec cet email");
+    }
+
+    return sendResponse(res, true, "Utilisateur trouvé", user);
+  } catch (error) {
+    console.error("getUserByEmail error:", error);
+    return sendResponse(res, false, "Erreur interne du serveur");
+  }
+}
+

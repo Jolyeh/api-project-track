@@ -74,3 +74,24 @@ export const getProfile = async (userId) => {
         include: { role: true, status: true }
     });
 };
+
+export const getUserByEmail = async (email) => {
+    const user = await prisma.user.findUnique({
+        where: { email },
+        select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            createdAt: true,
+            role: { select: { name: true } },
+            status: { select: { label: true } },
+        },
+    });
+
+    if (!user) {
+        throw new Error("Utilisateur introuvable avec cet email.");
+    }
+
+    return user;
+};
