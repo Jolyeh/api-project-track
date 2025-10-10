@@ -17,6 +17,9 @@
     "prisma:mongodb": "npx prisma init --datasource-provider mongodb",
     "prisma:sqlserver": "npx prisma init --datasource-provider sqlserver"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "keywords": [],
   "author": "Yehezekocolo Joel prince",
   "license": "ISC",
