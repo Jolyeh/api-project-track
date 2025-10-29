@@ -21,7 +21,7 @@ export async function register(req, res) {
     return sendResponse(res, true, "Utilisateur créé avec succès", user);
   } catch (error) {
     console.error(error);
-    return sendResponse(res, false, "Erreur interne du serveur");
+    return sendResponse(res, false, "Erreur interne du serveur: " + error.message);
   }
 }
 
