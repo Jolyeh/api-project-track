@@ -14,6 +14,10 @@ app.use(morgan('dev'));
 app.use(express.json());
 
 //routes
+app.get("/", (req, res) => {
+    res.send("Bienvenue to Resume Builder API");
+}
+);
 app.use('/api', authRoutes);
 app.use('/api/organisation', organizationRoutes);
 app.use('/api/role', roleRoutes);
@@ -21,5 +25,5 @@ app.use('/api/status', statusRoutes);
 app.use('/api/projet', projectRoutes);
 app.use('/api/tache', taskRoutes);
 app.use('/api/sous-tache', subTaskRoutes);
-  
+
 export default app;
