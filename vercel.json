@@ -1,21 +1,20 @@
 {
     "version": 2,
-    "name": "api project-track",
     "builds": [
-        {
-            "src": "src/server.js",
-            "use": "@vercel/node",
-            "config": {
-                "includeFiles": [
-                    "dist/**"
-                ]
-            }
-        }
+      {
+        "src": "src/server.js",
+        "use": "@vercel/node"
+      }
     ],
     "routes": [
-        {
-            "src": "src/(.*)",
-            "dest": "src/server.js"
-        }
-    ]
-}
+      {
+        "src": "/(.*)",
+        "dest": "src/server.js"
+      }
+    ],
+    "env": {
+      "DATABASE_URL": "@database_url",
+      "JWT_SECRET": "@jwt_secret"
+    }
+  }
+  
